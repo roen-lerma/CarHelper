@@ -135,7 +135,9 @@ Clone the repository:
 git clone https://github.com/roen-lerma/carhelper.git
 cd carhelper
 python -m venv venv
+# using windows
 venv\Scripts\activate
+# using mac/linux
 source venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
