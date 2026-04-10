@@ -9,8 +9,9 @@ class Vehicle(models.Model):
     year = models.IntegerField()
     vin = models.CharField(max_length=17, blank=True, null=True)
 
-def __str__(self):
-    return f"{self.year} {self.make} {self.model}"
+    def __str__(self):
+        return f"{self.year} {self.make} {self.model}"
+
 
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
