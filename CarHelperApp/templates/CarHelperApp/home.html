@@ -1,133 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CarHelper</title>
+  <head>
+      <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>CarHelper</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
+      <style>
+        * {
+          box-sizing: border-box;
+        }
 
-    header {
-      background-color: #1f2937;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+        body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background: #eef2f7;
+          color: #1f2937;
+        }
 
-    nav {
-      background-color: #374151;
-      padding: 10px;
-      text-align: center;
-    }
+        header {
+          background: linear-gradient(135deg, #111827, #1f3b63);
+          color: white;
+          padding: 50px 20px 35px;
+          text-align: center;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+        }
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: bold;
-    }
+        header h1 {
+          margin: 0;
+          font-size: 3rem;
+        }
 
-    .container {
-      width: 90%;
-      max-width: 1000px;
-      margin: 30px auto;
-    }
+        header p {
+          margin-top: 12px;
+          font-size: 1.15rem;
+          color: #dbeafe;
+        }
 
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+        nav {
+          background-color: #2f3f57;
+          padding: 14px 20px;
+          text-align: center;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
 
-    .car-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
+        nav a {
+          color: white;
+          text-decoration: none;
+          margin: 0 18px;
+          font-weight: bold;
+          font-size: 1rem;
+          padding: 8px 12px;
+          border-radius: 8px;
+          transition: background-color 0.2s ease;
+          display: inline-block;
+        }
 
-    .car-card {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 15px;
-      background-color: #fafafa;
-    }
+        nav a:hover {
+          background-color: rgba(255, 255, 255, 0.12);
+        }
 
-    button {
-      padding: 8px 12px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  </style>
-</head>
+        .container {
+          width: 92%;
+          max-width: 1150px;
+          margin: 35px auto 50px;
+        }
 
-<body>
+        .hero-card,
+        .section-card {
+          background: white;
+          border-radius: 18px;
+          padding: 26px;
+          margin-bottom: 24px;
+          box-shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
+          border: 1px solid #e5e7eb;
+        }
 
-<header>
-  <h1>CarHelper</h1>
-  <p>Can't fix your car? Ask the community.</p>
-</header>
+        .hero-card h2 {
+          margin: 0 0 10px 0;
+          font-size: 2rem;
+        }
 
-<nav>
-  <a href="{% url 'home' %}">Home</a>
-  <a href="{% url 'add_vehicle' %}">Add Vehicle</a>
-  <a href="{% url 'create_post' %}">Create Post</a>
-  <a href="{% url 'logout' %}">Logout</a>
-</nav>
+        .hero-card p {
+          margin: 0;
+          color: #4b5563;
+          line-height: 1.6;
+        }
 
-<div class="container">
+        .section-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 18px;
+          flex-wrap: wrap;
+        }
 
-  <!-- USER INFO -->
-  <div class="card">
-    <h2>Welcome, {{ user.username }}</h2>
-  </div>
+        .section-header h2 {
+          margin: 0;
+          font-size: 1.7rem;
+        }
 
-  <!-- VEHICLES -->
-  <div class="card">
-    <h2>Your Vehicles</h2>
+        .section-subtext {
+          margin: 6px 0 0 0;
+          color: #6b7280;
+          font-size: 0.95rem;
+        }
 
-    <div class="car-list">
-      {% for vehicle in vehicles %}
-        <div class="car-card">
-          <h3>{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h3>
-          {% if vehicle.vin %}
-            <p>VIN: {{ vehicle.vin }}</p>
-          {% endif %}
+        .badge {
+          display: inline-block;
+          background: #dbeafe;
+          color: #1d4ed8;
+          font-size: 0.85rem;
+          font-weight: bold;
+          padding: 6px 10px;
+          border-radius: 999px;
+        }
+
+        .filter-box {
+          background: #f8fafc;
+          border: 1px solid #dbe3ee;
+          border-radius: 14px;
+          padding: 18px;
+          margin-bottom: 22px;
+        }
+
+        .filter-title {
+          margin: 0 0 14px 0;
+          font-size: 1.2rem;
+          color: #111827;
+        }
+
+        .filter-form {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr auto;
+          gap: 12px;
+        }
+
+        .filter-form input,
+        .filter-form select {
+          display: grid;
+          grid-template-columns: repear(4,1fr) auto;
+          gap: 12px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+          display: inline-block;
+          text-decoration: none;
+          border: none;
+          border-radius: 10px;
+          padding: 10px 16px;
+          font-size: 0.95rem;
+          font-weight: bold;
+          cursor: pointer;
+          transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        .btn-primary {
+          background: #2563eb;
+          color: white;
+        }
+
+        .btn-secondary {
+          background: #e5e7eb;
+          color: #111827;
+        }
+
+        .btn-primary:hover,
+        .btn-secondary:hover {
+          transform: translateY(-1px);
+          opacity: 0.95;
+        }
+
+        .car-list {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 18px;
+        }
+
+        .car-card {
+          background: linear-gradient(180deg, #ffffff, #f8fafc);
+          border: 1px solid #dbe3ee;
+          border-radius: 16px;
+          padding: 18px;
+          box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .car-card:hover,
+        .post-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 20px rgba(15, 23, 42, 0.10);
+        }
+
+        .car-card h3 {
+          margin: 0 0 10px 0;
+          font-size: 1.15rem;
+        }
+
+        .car-meta {
+          color: #4b5563;
+          line-height: 1.6;
+          margin-bottom: 6px;
+        }
+
+        .posts-list {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 18px;
+        }
+
+        .post-card {
+          background: linear-gradient(180deg, #ffffff, #f8fafc);
+          border: 1px solid #dbe3ee;
+          border-radius: 16px;
+          padding: 18px;
+          box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .post-card h3 {
+          margin: 0 0 10px 0;
+          font-size: 1.2rem;
+          color: #111827;
+        }
+
+        .post-label {
+          font-weight: bold;
+          color: #1f2937;
+        }
+
+        .post-text {
+          color: #4b5563;
+          line-height: 1.6;
+          margin: 8px 0;
+        }
+
+        .post-actions {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-top: 14px;
+          margin-bottom: 14px;
+        }
+
+        .top-comment {
+          margin-top: 12px;
+          background: #f8fafc;
+          border-left: 4px solid #2563eb;
+          padding: 12px;
+          border-radius: 10px;
+        }
+
+        .top-comment h4 {
+          margin: 0 0 8px 0;
+          font-size: 1rem;
+        }
+
+        .top-comment p {
+          margin: 0;
+          color: #4b5563;
+          line-height: 1.5;
+        }
+
+        .empty-state {
+          text-align: center;
+          padding: 30px 20px;
+          border: 2px dashed #cbd5e1;
+          border-radius: 16px;
+          background: #f8fafc;
+          color: #6b7280;
+          font-size: 1rem;
+        }
+
+        @media (max-width: 900px) {
+          .filter-form {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 768px) {
+          header h1 {
+            font-size: 2.3rem;
+          }
+
+          nav a {
+            margin: 6px 8px;
+          }
+
+          .container {
+            width: 94%;
+          }
+        }
+      </style>
+  </head>
+
+  <body>
+
+      <header>
+          <h1>CarHelper</h1>
+          <p>Can't fix your car? Ask the community.</p>
+      </header>
+
+      <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'add_vehicle' %}">Add Vehicle</a>
+        <a href="{% url 'create_post' %}">Create Post</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      </nav>
+
+    <div class="container">
+
+            <div class="hero-card">
+              <h2>Welcome back, {{ user.username }}</h2>
+              <p>
+                Manage your vehicles, ask questions, and learn from the community
+              </p>
+            </div>
+
+          <div class="section-card">
+              <div class="section-header">
+                    <div>
+                      <h2>Your Vehicles</h2>
+                      <p class="section-subtext">Search, filter, and view your saved vehicles</p>
+                    </div>
+                  <span class="badge">Garage</span>
+              </div>
+
+              <div class="filter-box">
+                <form class="filter-form" method="GET" action="">
+                  <select name="year">
+                    <option value="">Select Year</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                  </select>
+
+                  <select name="brand">
+                    <option value="">Select Brand</option>
+                    <option value="toyota">Toyota</option>
+                    <option value="ford">Ford</option>
+                    <option value="chevrolet">Chevrolet</option>
+                    <option value="honda">Honda</option>
+                    <option value="nissan">Nissan</option>
+                  </select>
+
+                  <select name="type">
+                    <option value="">Select Type</option>
+                    <option value="sedan">Sedan</option>
+                    <option value="suv">SUV</option>
+                    <option value="truck">Truck</option>
+                    <option value="coupe">Coupe</option>
+                    <option value="hatchback">Hatchback</option>
+                  </select>
+
+                  <select name="model">
+                    <option value="">Select Model</option>
+                    <option value="camry">Camry</option>
+                    <option value="corolla">Corolla</option>
+                    <option value="f150">F-150</option>
+                    <option value="civic">Civic</option>
+                    <option value="silverado">Silverado</option>
+                  </select>
+
+                  <button type="submit" class="btn-primary">Search</button>
+                </form>
+              </div>
+
+                {% if vehicles %}
+              <div class="car-list">
+                {% for vehicle in vehicles %}
+                      <div class="car-card">
+                        <h3>{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h3>
+                        <div class="car-meta"><strong>Make:</strong> {{ vehicle.make }}</div>
+                        <div class="car-meta"><strong>Model:</strong> {{ vehicle.model }}</div>
+                        <div class="car-meta"><strong>Year:</strong> {{ vehicle.year }}</div>
+                        {% if vehicle.vin %}
+                          <div class="car-meta"><strong>VIN:</strong> {{ vehicle.vin }}</div>
+                        {% endif %}
+                      </div>
+                {% endfor %}
+              </div>
+                {% else %}
+                  
+                {% endif %}
         </div>
-      {% empty %}
-        <p>No vehicles added yet.</p>
-      {% endfor %}
-    </div>
-  </div>
 
-  <!-- POSTS -->
-  <div class="card">
-    <h2>Recent Posts</h2>
+        <div class="section-card">
+            <div class="section-header">
+                <div>
+                  <h2>Recent Posts</h2>
+                  <p class="section-subtext">See problems, discussions, and possible fixes.</p>
+                </div>
+              <span class="badge">Community</span>
+            </div>
 
-    {% for post in posts %}
-      <div class="car-card">
-        <h3>{{ post.title }}</h3>
-        <p>{{ post.description }}</p>
-        {% if post.vehicle %}
-          <small>Vehicle: {{ post.vehicle }}</small>
-        {% endif %}
+            {% if posts %}
+            <div class="posts-list">
+              {% for post in posts %}
+                <div class="post-card">
+                    <h3>{{ post.title }}</h3>
+
+                    {% if post.vehicle %}
+                      <p class="post-text">
+                        <span class="post-label">Vehicle:</span> {{ post.vehicle }}
+                      </p>
+                    {% endif %}
+
+                    <p class="post-text">
+                      <span class="post-label">Problem:</span> {{ post.description }}
+                    </p>
+
+                    <p class="post-text">
+                      <span class="post-label">Possible Fix:</span> Check the discussion and repair guide for more help.
+                    </p>
+
+                    <div class="post-actions">
+                      <a href="#" class="btn-primary">Repair Guide</a>
+                      <a href="#" class="btn-secondary">Comment Section</a>
+                    </div>
+
+                    <div class="top-comment">
+                      <h4>Top Comment</h4>
+                      <p>No top comment available yet.</p>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty-state">
+              <p>No posts yet.</p>
+            </div>
+          {% endif %}
       </div>
-    {% empty %}
-      <p>No posts yet.</p>
-    {% endfor %}
-  </div>
 
-</div>
+    </div>
 
-</body>
+  </body>
 </html>
