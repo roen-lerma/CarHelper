@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ post.title }} - CarHelper</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #09111f;
+            --bg-mid: #13233d;
+            --bg-light: #1f3b63;
+            --card-bg: rgba(255, 255, 255, 0.94);
+            --text-main: #142033;
+            --text-soft: #5b6678;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #f8fafc;
+            background:
+                radial-gradient(circle at top left, rgba(96, 165, 250, 0.22), transparent 30%),
+                radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 28%),
+                linear-gradient(135deg, var(--bg-dark), var(--bg-mid), var(--bg-light));
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 42px 20px 24px;
+            text-align: center;
+        }
+
+        .brand-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 14px 22px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+        }
+
+        .brand-icon { font-size: 2.2rem; }
+
+        .brand-text h1 {
+            margin: 0;
+            font-size: 3rem;
+            background: linear-gradient(90deg, #ffffff, #bfdbfe, #60a5fa);
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            margin: 6px 0 0;
+            font-size: 1rem;
+            color: #dbeafe;
+        }
+
+        nav {
+            width: 92%;
+            max-width: 1180px;
+            margin: 14px auto 0;
+            padding: 14px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.98rem;
+            padding: 11px 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        nav a:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .container {
+            width: 92%;
+            max-width: 860px;
+            margin: 34px auto 60px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border-radius: 22px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .post-title {
+            font-size: 1.8rem;
+            margin: 0 0 10px;
+        }
+
+        .post-meta {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .post-description {
+            line-height: 1.7;
+            color: var(--text-soft);
+        }
+
+        .comments-title {
+            font-size: 1.4rem;
+            margin: 0 0 18px;
+        }
+
+        .comment {
+            border-left: 4px solid #2563eb;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            background: #f8fafc;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .comment-date {
+            font-size: 0.82rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .comment-content {
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .comment-form-title {
+            font-size: 1.2rem;
+            margin: 0 0 16px;
+        }
+
+        form p { margin-bottom: 14px; }
+
+        form label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 1rem;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        form textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 0.98rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); }
+
+        .btn-secondary {
+            display: inline-block;
+            text-decoration: none;
+            background: #e5e7eb;
+            color: #111827;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 0.98rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .empty-state {
+            color: #94a3b8;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand-wrap">
+            <div class="brand-icon">🚗🔧</div>
+            <div class="brand-text">
+                <h1>CarHelper</h1>
+                <p>Community discussion thread</p>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="{% url 'home' %}">🏠 Home</a>
+        <a href="{% url 'add_vehicle' %}">➕ Add Vehicle</a>
+        <a href="{% url 'create_post' %}">📝 Create Post</a>
+        <a href="{% url 'vehicle_lookup' %}">🔍 Vehicle Lookup</a>
+        <a href="{% url 'issue_tracker' %}">📊 Issue Tracker</a>
+        <a href="{% url 'logout' %}">↩ Logout</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- Post -->
+        <div class="card">
+            <h1 class="post-title">{{ post.title }}</h1>
+            <div class="post-meta">
+                Posted by {{ post.author }} 
+                {% if post.vehicle %} • {{ post.vehicle }} {% endif %}
+                • {{ post.created_at|date:"M d, Y" }}
+            </div>
+            <p class="post-description">{{ post.description }}</p>
+        </div>
+
+        <!-- Comments -->
+        <div class="card">
+            <h2 class="comments-title">Comments ({{ comments.count }})</h2>
+
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="comment">
+                        <div class="comment-author">{{ comment.author }}</div>
+                        <div class="comment-date">{{ comment.created_at|date:"M d, Y g:i A" }}</div>
+                        <div class="comment-content">{{ comment.content }}</div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-state">No comments yet. Be the first to reply!</p>
+            {% endif %}
+        </div>
+
+        <!-- Comment Form -->
+        <div class="card">
+            <h3 class="comment-form-title">Leave a Comment</h3>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn-primary">Post Comment</button>
+                <a href="{% url 'home' %}" class="btn-secondary">Back to Home</a>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,23 +1,28 @@
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponse
-from .models import Vehicle, Post
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .forms import VehicleForm, PostForm
-
+from django.http import HttpResponse
+from .models import Vehicle, Post, Comment, Rating
+from .forms import VehicleForm, PostForm, CommentForm, RatingForm
+import requests
 
 @login_required
 def home(request):
     vehicles = Vehicle.objects.filter(owner=request.user)
-    # Post.objects.filter(author+request.user) is for current user feed, will change to Post.objects.all() once bulletin board is created
-    posts = Post.objects.filter(author=request.user).order_by('-created_at')[:5]
+    
+    tag_filter = request.GET.get('tag', '')
+    
+    if tag_filter:
+        posts = Post.objects.filter(tag=tag_filter).order_by('-created_at')
+    else:
+        posts = Post.objects.all().order_by('-created_at')
 
     return render(request, 'CarHelperApp/home.html', {
         'vehicles': vehicles,
-        'posts': posts
+        'posts': posts,
+        'tag_filter': tag_filter
     })
 
 
@@ -79,3 +84,97 @@ def create_post(request):
         'form': form
     })
 
+@login_required
+def post_detail(request, post_id):
+    post = Post.objects.get(id=post_id)
+    comments = post.comments.all().order_by('created_at')
+    
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect('post_detail', post_id=post.id)
+    else:
+        form = CommentForm()
+
+    return render(request, 'CarHelperApp/post_detail.html', {
+        'post': post,
+        'comments': comments,
+        'form': form
+    })
+
+@login_required
+def rate_vehicle(request, vehicle_id):
+    vehicle = Vehicle.objects.get(id=vehicle_id)
+    existing_rating = Rating.objects.filter(user=request.user, vehicle=vehicle).first()
+
+    if request.method == 'POST':
+        form = RatingForm(request.POST, instance=existing_rating)
+        if form.is_valid():
+            rating = form.save(commit=False)
+            rating.user = request.user
+            rating.vehicle = vehicle
+            rating.save()
+            return redirect('home')
+    else:
+        form = RatingForm(instance=existing_rating)
+
+    return render(request, 'CarHelperApp/rate_vehicle.html', {
+        'form': form,
+        'vehicle': vehicle,
+        'existing_rating': existing_rating
+    })
+
+@login_required
+def issue_tracker(request):
+    from django.db.models import Count
+
+    posts = Post.objects.values(
+        'vehicle__make',
+        'vehicle__model',
+        'vehicle__year',
+        'tag'
+    ).annotate(
+        count=Count('id')
+    ).order_by('-count')
+
+    return render(request, 'CarHelperApp/issue_tracker.html', {
+        'posts': posts
+    })
+
+def vehicle_lookup(request):
+    vehicle_data = None
+    error = None
+
+    if request.method == 'POST':
+        vin = request.POST.get('vin', '').strip()
+        if vin:
+            try:
+                url = f'https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVin/{vin}?format=json'
+                response = requests.get(url)
+                data = response.json()
+
+                results = data.get('Results', [])
+                filtered = {item['Variable']: item['Value'] for item in results if item['Value'] and item['Value'] != 'Not Applicable'}
+
+                vehicle_data = {
+                    'Make': filtered.get('Make', 'N/A'),
+                    'Model': filtered.get('Model', 'N/A'),
+                    'Year': filtered.get('Model Year', 'N/A'),
+                    'Engine': filtered.get('Displacement (L)', 'N/A'),
+                    'Fuel_Type': filtered.get('Fuel Type - Primary', 'N/A'),
+                    'Transmission': filtered.get('Transmission Style', 'N/A'),
+                    'Drive_Type': filtered.get('Drive Type', 'N/A'),
+                    'Cylinders': filtered.get('Engine Number of Cylinders', 'N/A'),
+                    'Vehicle_Type': filtered.get('Vehicle Type', 'N/A'),
+                }
+            except Exception as e:
+                error = 'Could not retrieve vehicle data. Please check the VIN and try again.'
+
+    return render(request, 'CarHelperApp/vehicle_lookup.html', {
+        'vehicle_data': vehicle_data,
+        'error': error
+    })

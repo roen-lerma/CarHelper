@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vehicle Lookup - CarHelper</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #09111f;
+            --bg-mid: #13233d;
+            --bg-light: #1f3b63;
+            --card-bg: rgba(255, 255, 255, 0.94);
+            --text-main: #142033;
+            --text-soft: #5b6678;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #f8fafc;
+            background:
+                radial-gradient(circle at top left, rgba(96, 165, 250, 0.22), transparent 30%),
+                radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 28%),
+                linear-gradient(135deg, var(--bg-dark), var(--bg-mid), var(--bg-light));
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 42px 20px 24px;
+            text-align: center;
+        }
+
+        .brand-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 14px 22px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+        }
+
+        .brand-icon { font-size: 2.2rem; }
+
+        .brand-text h1 {
+            margin: 0;
+            font-size: 3rem;
+            background: linear-gradient(90deg, #ffffff, #bfdbfe, #60a5fa);
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            margin: 6px 0 0;
+            font-size: 1rem;
+            color: #dbeafe;
+        }
+
+        nav {
+            width: 92%;
+            max-width: 1180px;
+            margin: 14px auto 0;
+            padding: 14px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.98rem;
+            padding: 11px 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        nav a:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .container {
+            width: 92%;
+            max-width: 700px;
+            margin: 34px auto 60px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border-radius: 22px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            margin: 0 0 10px;
+            font-size: 1.8rem;
+        }
+
+        .card p {
+            color: var(--text-soft);
+            margin: 0 0 22px;
+            line-height: 1.7;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-row input {
+            flex: 1;
+            padding: 13px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #111827;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .search-row input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 13px 22px;
+            font-size: 0.98rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); }
+
+        .btn-secondary {
+            display: inline-block;
+            text-decoration: none;
+            background: #e5e7eb;
+            color: #111827;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 0.98rem;
+            font-weight: bold;
+            margin-top: 16px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .result-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
+
+        .result-label {
+            font-size: 0.82rem;
+            font-weight: bold;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .result-value {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .error-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-top: 16px;
+        }
+
+        .vin-hint {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e3a8a;
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        @media (max-width: 600px) {
+            .results-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand-wrap">
+            <div class="brand-icon">🔍🚗</div>
+            <div class="brand-text">
+                <h1>CarHelper</h1>
+                <p>Look up vehicle specs using your VIN number</p>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="{% url 'home' %}">🏠 Home</a>
+        <a href="{% url 'add_vehicle' %}">➕ Add Vehicle</a>
+        <a href="{% url 'create_post' %}">📝 Create Post</a>
+        <a href="{% url 'vehicle_lookup' %}">🔍 Vehicle Lookup</a>
+        <a href="{% url 'issue_tracker' %}">📊 Issue Tracker</a>
+        <a href="{% url 'logout' %}">↩ Logout</a>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2>Vehicle Lookup</h2>
+            <p>Enter your 17-character VIN to get detailed specs about your vehicle.</p>
+
+            <div class="vin-hint">
+                Your VIN can be found on your dashboard near the windshield, on your registration, 
+                or on your insurance card.
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="search-row">
+                    <input 
+                        type="text" 
+                        name="vin" 
+                        placeholder="Enter VIN (e.g. 1HGCM82633A123456)" 
+                        maxlength="17"
+                        value="{{ request.POST.vin }}"
+                    />
+                    <button type="submit" class="btn-primary">🔍 Search</button>
+                </div>
+            </form>
+
+            {% if error %}
+                <div class="error-box">{{ error }}</div>
+            {% endif %}
+        </div>
+
+        {% if vehicle_data %}
+            <div class="card">
+                <h2>{{ vehicle_data.Year }} {{ vehicle_data.Make }} {{ vehicle_data.Model }}</h2>
+                <p>Specs retrieved from NHTSA vehicle database.</p>
+
+                <div class="results-grid">
+                    <div class="result-item">
+                        <div class="result-label">Make</div>
+                        <div class="result-value">{{ vehicle_data.Make }}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Model</div>
+                        <div class="result-value">{{ vehicle_data.Model }}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Year</div>
+                        <div class="result-value">{{ vehicle_data.Year }}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Engine (L)</div>
+                        <div class="result-value">{{ vehicle_data.Engine }}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Cylinders</div>
+                        <div class="result-value">{{ vehicle_data.Cylinders }}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Fuel Type</div>
+                        <div class="result-value">{{ vehicle_data.Fuel_Type }}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Transmission</div>
+                        <div class="result-value">{{ vehicle_data.Transmission }}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Drive Type</div>
+                        <div class="result-value">{{ vehicle_data.Drive_Type }}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Vehicle Type</div>
+                        <div class="result-value">{{ vehicle_data.Vehicle_Type }}</div>
+                    </div>
+                </div>
+
+                <a href="{% url 'vehicle_lookup' %}" class="btn-secondary">🔍 Search Another Vehicle</a>
+            </div>
+        {% endif %}
+
+    </div>
+</body>
+</html>
