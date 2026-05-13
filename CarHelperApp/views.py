@@ -55,7 +55,7 @@ def logout_view(request):
 @login_required
 def add_vehicle(request):
     if request.method == 'POST':
-        form = VehicleForm(request.POST)
+        form = VehicleForm(request.POST, request.FILES)
         if form.is_valid():
             vehicle = form.save(commit=False)
             vehicle.owner = request.user
@@ -67,7 +67,6 @@ def add_vehicle(request):
     return render(request, 'CarHelperApp/add_vehicle.html', {
         'form': form
     })
-
 @login_required
 def create_post(request):
     if request.method == 'POST':
@@ -144,6 +143,22 @@ def issue_tracker(request):
     return render(request, 'CarHelperApp/issue_tracker.html', {
         'posts': posts
     })
+
+@login_required
+def delete_vehicle(request, vehicle_id):
+    vehicle = Vehicle.objects.get(id=vehicle_id, owner=request.user)
+    if request.method == 'POST':
+        vehicle.delete()
+        return redirect('home')
+    return redirect('home')
+
+@login_required
+def delete_post(request, post_id):
+    post = Post.objects.get(id=post_id, author=request.user)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('home')
+    return redirect('home')
 
 def vehicle_lookup(request):
     vehicle_data = None

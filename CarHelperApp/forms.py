@@ -1,9 +1,10 @@
 from django import forms
 from .models import Vehicle, Post, Comment, Rating
+
 class VehicleForm(forms.ModelForm):
     class Meta:
         model = Vehicle
-        fields = ['make', 'model', 'year', 'vin']
+        fields = ['make', 'model', 'year', 'vin', 'image']
 
 
 class PostForm(forms.ModelForm):

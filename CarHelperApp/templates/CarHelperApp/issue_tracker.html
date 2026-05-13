@@ -4,238 +4,89 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Issue Tracker - CarHelper</title>
-
     <style>
         * { box-sizing: border-box; }
-
         :root {
-            --bg-dark: #09111f;
-            --bg-mid: #13233d;
-            --bg-light: #1f3b63;
-            --card-bg: rgba(255, 255, 255, 0.94);
-            --text-main: #142033;
-            --text-soft: #5b6678;
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+            --bg-dark: #09111f; --bg-mid: #13233d; --bg-light: #1f3b63;
+            --card-bg: rgba(255,255,255,0.94); --text-main: #142033; --text-soft: #5b6678;
+            --primary: #2563eb; --primary-dark: #1d4ed8; --shadow: 0 16px 40px rgba(0,0,0,0.18);
         }
-
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            color: #f8fafc;
-            background:
-                radial-gradient(circle at top left, rgba(96, 165, 250, 0.22), transparent 30%),
-                radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 28%),
+            margin: 0; font-family: Arial, sans-serif; color: #f8fafc;
+            background: radial-gradient(circle at top left, rgba(96,165,250,0.22), transparent 30%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.18), transparent 28%),
                 linear-gradient(135deg, var(--bg-dark), var(--bg-mid), var(--bg-light));
             min-height: 100vh;
         }
-
-        header {
-            padding: 42px 20px 24px;
-            text-align: center;
-        }
-
+        header { padding: 42px 20px 24px; text-align: center; }
         .brand-wrap {
-            display: inline-flex;
-            align-items: center;
-            gap: 14px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 14px 22px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+            display: inline-flex; align-items: center;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+            padding: 14px 28px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.22);
         }
-
-        .brand-icon { font-size: 2.2rem; }
-
-        .brand-text h1 {
-            margin: 0;
-            font-size: 3rem;
-            background: linear-gradient(90deg, #ffffff, #bfdbfe, #60a5fa);
-            -webkit-text-fill-color: transparent;
-        }
-
-        .brand-text p {
-            margin: 6px 0 0;
-            font-size: 1rem;
-            color: #dbeafe;
-        }
-
+        .brand-text h1 { margin: 0; font-size: 2.8rem; font-weight: 800; color: #ffffff; background: none; -webkit-text-fill-color: unset; }
+        .brand-text p { margin: 6px 0 0; font-size: 1rem; color: #93c5fd; }
         nav {
-            width: 92%;
-            max-width: 1180px;
-            margin: 14px auto 0;
-            padding: 14px;
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 18px;
+            width: 92%; max-width: 1180px; margin: 14px auto 0; padding: 10px 16px;
+            display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px;
         }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.98rem;
-            padding: 11px 16px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid transparent;
-            transition: all 0.2s ease;
-        }
-
-        nav a:hover {
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.14);
-        }
-
-        .container {
-            width: 92%;
-            max-width: 860px;
-            margin: 34px auto 60px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            color: var(--text-main);
-            border-radius: 22px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
-        }
-
-        .card h2 {
-            margin: 0 0 8px;
-            font-size: 1.8rem;
-        }
-
-        .card p {
-            color: var(--text-soft);
-            margin: 0 0 24px;
-            line-height: 1.7;
-        }
-
-        .issue-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 14px;
-            margin-bottom: 12px;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .issue-info {
-            flex: 1;
-        }
-
-        .issue-vehicle {
-            font-weight: bold;
-            font-size: 1rem;
-            color: #0f172a;
-            margin-bottom: 4px;
-        }
-
-        .issue-tag {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 0.82rem;
-            font-weight: bold;
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-
+        nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 0.9rem; padding: 9px 16px; border-radius: 10px; border: 1px solid transparent; transition: all 0.2s ease; }
+        nav a:hover { color: #ffffff; background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.18); }
+        nav a.active { color: #ffffff; background: rgba(37,99,235,0.4); border-color: rgba(96,165,250,0.3); }
+        .container { width: 92%; max-width: 860px; margin: 34px auto 60px; }
+        .card { background: var(--card-bg); color: var(--text-main); border-radius: 22px; padding: 32px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid rgba(219,234,254,0.45); }
+        .card h2 { margin: 0 0 8px; font-size: 1.8rem; color: #111827; }
+        .card-subtext { color: var(--text-soft); margin: 0 0 24px; line-height: 1.7; }
+        .issue-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; margin-bottom: 12px; gap: 12px; flex-wrap: wrap; }
+        .issue-info { flex: 1; }
+        .issue-vehicle { font-weight: bold; font-size: 1rem; color: #0f172a; margin-bottom: 6px; }
+        .issue-tag { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: bold; background: #dbeafe; color: #1d4ed8; }
         .issue-tag.engine { background: #fee2e2; color: #b91c1c; }
         .issue-tag.transmission { background: #fef9c3; color: #854d0e; }
         .issue-tag.electrical { background: #fef3c7; color: #92400e; }
         .issue-tag.suspension { background: #dcfce7; color: #166534; }
         .issue-tag.other { background: #f1f5f9; color: #475569; }
-
-        .issue-count {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #2563eb;
-            white-space: nowrap;
-        }
-
-        .issue-count span {
-            font-size: 0.85rem;
-            color: #64748b;
-            font-weight: normal;
-        }
-
-        .bar-wrap {
-            width: 100%;
-            background: #e2e8f0;
-            border-radius: 999px;
-            height: 8px;
-            margin-top: 10px;
-        }
-
-        .bar-fill {
-            height: 8px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, #2563eb, #60a5fa);
-        }
-
-        .empty-state {
-            color: #94a3b8;
-            font-style: italic;
-            text-align: center;
-            padding: 20px;
-        }
+        .issue-count { font-size: 1.4rem; font-weight: bold; color: #2563eb; white-space: nowrap; }
+        .issue-count span { font-size: 0.85rem; color: #64748b; font-weight: normal; }
+        .bar-wrap { width: 100%; background: #e2e8f0; border-radius: 999px; height: 8px; margin-top: 10px; }
+        .bar-fill { height: 8px; border-radius: 999px; background: linear-gradient(90deg, #2563eb, #60a5fa); }
+        .empty-state { color: #94a3b8; font-style: italic; text-align: center; padding: 20px; }
     </style>
 </head>
-
 <body>
     <header>
         <div class="brand-wrap">
-            <div class="brand-icon">📊🚗</div>
             <div class="brand-text">
                 <h1>CarHelper</h1>
                 <p>See which vehicles have the most reported issues</p>
             </div>
         </div>
     </header>
-
     <nav>
-        <a href="{% url 'home' %}">🏠 Home</a>
-        <a href="{% url 'add_vehicle' %}">➕ Add Vehicle</a>
-        <a href="{% url 'create_post' %}">📝 Create Post</a>
-        <a href="{% url 'vehicle_lookup' %}">🔍 Vehicle Lookup</a>
-        <a href="{% url 'issue_tracker' %}">📊 Issue Tracker</a>
-        <a href="{% url 'logout' %}">↩ Logout</a>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'add_vehicle' %}">Add Vehicle</a>
+        <a href="{% url 'create_post' %}">Create Post</a>
+        <a href="{% url 'vehicle_lookup' %}">Vehicle Lookup</a>
+        <a href="{% url 'issue_tracker' %}" class="active">Issue Tracker</a>
+        <a href="{% url 'logout' %}">Logout</a>
     </nav>
-
     <div class="container">
         <div class="card">
             <h2>Issue Frequency Tracker</h2>
-            <p>Vehicles and issue categories ranked by number of community reports. Higher counts indicate more commonly reported problems.</p>
-
+            <p class="card-subtext">Vehicles and issue categories ranked by number of community reports. Higher counts indicate more commonly reported problems.</p>
             {% if posts %}
                 {% for item in posts %}
                     {% if item.vehicle__make %}
                         <div class="issue-item">
                             <div class="issue-info">
-                                <div class="issue-vehicle">
-                                    {{ item.vehicle__year }} {{ item.vehicle__make }} {{ item.vehicle__model }}
-                                </div>
+                                <div class="issue-vehicle">{{ item.vehicle__year }} {{ item.vehicle__make }} {{ item.vehicle__model }}</div>
                                 <span class="issue-tag {{ item.tag }}">{{ item.tag|capfirst }}</span>
                                 <div class="bar-wrap">
                                     <div class="bar-fill" style="width: {{ item.count }}0%;"></div>
                                 </div>
                             </div>
-                            <div class="issue-count">
-                                {{ item.count }} <span>report{{ item.count|pluralize }}</span>
-                            </div>
+                            <div class="issue-count">{{ item.count }} <span>report{{ item.count|pluralize }}</span></div>
                         </div>
                     {% endif %}
                 {% endfor %}

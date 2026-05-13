@@ -12,4 +12,6 @@ urlpatterns = [
     path('rate/<int:vehicle_id>/', views.rate_vehicle, name='rate_vehicle'),
     path('lookup/', views.vehicle_lookup, name='vehicle_lookup'),
     path('issues/', views.issue_tracker, name='issue_tracker'),
+    path('delete-vehicle/<int:vehicle_id>/', views.delete_vehicle, name='delete_vehicle'),
+    path('delete-post/<int:post_id>/', views.delete_post, name='delete_post'),
 ]
