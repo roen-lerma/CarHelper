@@ -57,8 +57,6 @@ The lookup page will display key vehicle specifications including:
 - Transmission type
 - Drivetrain
 - Fuel type
-- Oil capacity
-- OEM wheel size
 
 Vehicle data will be retrieved using external automotive APIs.
 ### 3. Vehicle Rating System
