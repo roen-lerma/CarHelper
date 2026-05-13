@@ -34,13 +34,11 @@ The platform will include a community bulletin board where users can post issues
 Features include:
 
 - Posts filtered by vehicle make and model
-- Display of the top 5 most discussed models with an additional "Other" category
 - Tagging system for issues such as:
   - Engine
   - Transmission
   - Electrical
   - Suspension
-- Upvote and downvote system to highlight helpful answers
 - Comment threads for troubleshooting discussions
 ### 2. Vehicle Lookup Page
 
