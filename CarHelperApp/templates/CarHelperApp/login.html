@@ -3,133 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarHelper Login</title>
+    <title>Login - CarHelper</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
         body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #111827, #1f2937, #374151);
+            min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            background: linear-gradient(135deg, #09111f, #13233d, #1f3b63);
             color: white;
         }
-
         .login-container {
-            width: 100%;
-            max-width: 420px;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+            width: 100%; max-width: 420px;
+            background: rgba(255,255,255,0.07);
+            padding: 40px 36px;
+            border-radius: 20px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.35);
             backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
-
-        .brand {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .brand h1 {
-            font-size: 32px;
-            margin-bottom: 8px;
-            color: #60a5fa;
-        }
-
-        .brand p {
-            font-size: 14px;
-            color: #d1d5db;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        form p {
-            margin-bottom: 15px;
-        }
-
-        form label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-            color: #e5e7eb;
-        }
-
+        .brand { text-align: center; margin-bottom: 28px; }
+        .brand h1 { font-size: 2.4rem; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
+        .brand p { font-size: 0.9rem; color: #93c5fd; }
+        h2 { text-align: center; margin-bottom: 24px; font-size: 1.3rem; color: #e2e8f0; font-weight: 600; }
+        form p { margin-bottom: 16px; }
+        form label { display: block; margin-bottom: 6px; font-weight: 600; color: #cbd5e1; font-size: 0.9rem; }
         form input {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            outline: none;
-            font-size: 15px;
+            width: 100%; padding: 12px 14px; border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px; outline: none; font-size: 15px;
+            background: rgba(255,255,255,0.1); color: white;
+            transition: border-color 0.2s ease;
         }
-
+        form input:focus { border-color: #60a5fa; }
         button {
-            width: 100%;
-            padding: 12px;
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s ease;
-            margin-top: 10px;
+            width: 100%; padding: 13px; background: #2563eb; color: white;
+            border: none; border-radius: 10px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: background 0.2s ease; margin-top: 10px;
         }
-
-        button:hover {
-            background-color: #1d4ed8;
-        }
-
-        .register-link {
-            margin-top: 18px;
-            text-align: center;
-            font-size: 14px;
-            color: #d1d5db;
-        }
-
-        .register-link a {
-            color: #60a5fa;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
+        button:hover { background: #1d4ed8; }
+        .register-link { margin-top: 20px; text-align: center; font-size: 0.9rem; color: #94a3b8; }
+        .register-link a { color: #60a5fa; text-decoration: none; font-weight: 600; }
+        .register-link a:hover { text-decoration: underline; }
+        .errorlist { color: #fca5a5; font-size: 0.85rem; padding-left: 16px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-
     <div class="login-container">
         <div class="brand">
             <h1>CarHelper</h1>
-            <p>log in to access your account</p>
+            <p>Sign in to access your garage and community</p>
         </div>
-
-        <h2>Login to CarHelper</h2>
-
+        <h2>Welcome Back</h2>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Login so we can remember</button>
+            <button type="submit">Sign In</button>
         </form>
-
         <div class="register-link">
-            Don't have an account?
-            <a href="{% url 'register' %}">Register</a>
+            Don't have an account? <a href="{% url 'register' %}">Create one</a>
         </div>
     </div>
-
 </body>
 </html>

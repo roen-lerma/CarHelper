@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rate Vehicle - CarHelper</title>
+    <style>
+        * { box-sizing: border-box; }
+        :root {
+            --bg-dark: #09111f; --bg-mid: #13233d; --bg-light: #1f3b63;
+            --card-bg: rgba(255,255,255,0.94); --text-main: #142033; --text-soft: #5b6678;
+            --primary: #2563eb; --primary-dark: #1d4ed8; --shadow: 0 16px 40px rgba(0,0,0,0.18);
+        }
+        body {
+            margin: 0; font-family: Arial, sans-serif; color: #f8fafc;
+            background: radial-gradient(circle at top left, rgba(96,165,250,0.22), transparent 30%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.18), transparent 28%),
+                linear-gradient(135deg, var(--bg-dark), var(--bg-mid), var(--bg-light));
+            min-height: 100vh;
+        }
+        header { padding: 42px 20px 24px; text-align: center; }
+        .brand-wrap {
+            display: inline-flex; align-items: center;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+            padding: 14px 28px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+        }
+        .brand-text h1 { margin: 0; font-size: 2.8rem; font-weight: 800; color: #ffffff; background: none; -webkit-text-fill-color: unset; }
+        .brand-text p { margin: 6px 0 0; font-size: 1rem; color: #93c5fd; }
+        nav {
+            width: 92%; max-width: 1180px; margin: 14px auto 0; padding: 10px 16px;
+            display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px;
+        }
+        nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 0.9rem; padding: 9px 16px; border-radius: 10px; border: 1px solid transparent; transition: all 0.2s ease; }
+        nav a:hover { color: #ffffff; background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.18); }
+        nav a.active { color: #ffffff; background: rgba(37,99,235,0.4); border-color: rgba(96,165,250,0.3); }
+        .container { width: 92%; max-width: 600px; margin: 34px auto 60px; }
+        .card { background: var(--card-bg); color: var(--text-main); border-radius: 22px; padding: 32px; box-shadow: var(--shadow); border: 1px solid rgba(219,234,254,0.45); }
+        .card h2 { margin: 0 0 6px; font-size: 1.8rem; color: #111827; }
+        .vehicle-name { color: #2563eb; font-weight: bold; font-size: 1.1rem; margin-bottom: 20px; }
+        .existing-badge { display: inline-block; background: #dbeafe; color: #1d4ed8; font-size: 0.84rem; font-weight: bold; padding: 6px 12px; border-radius: 999px; margin-bottom: 18px; }
+        .rating-hint { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; border-radius: 14px; padding: 14px 16px; font-size: 0.95rem; line-height: 1.6; margin-bottom: 22px; }
+        form p { margin-bottom: 18px; }
+        form label { display: block; margin-bottom: 8px; font-weight: bold; color: #1f2937; }
+        form input[type="number"] { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 1rem; color: #111827; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+        form input[type="number"]:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+        .button-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: none; border-radius: 10px; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: transform 0.15s ease; }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .btn-secondary { display: inline-block; text-decoration: none; background: #e2e8f0; color: #1e293b; border-radius: 10px; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand-wrap">
+            <div class="brand-text">
+                <h1>CarHelper</h1>
+                <p>Rate your vehicle and help the community</p>
+            </div>
+        </div>
+    </header>
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'add_vehicle' %}">Add Vehicle</a>
+        <a href="{% url 'create_post' %}">Create Post</a>
+        <a href="{% url 'vehicle_lookup' %}">Vehicle Lookup</a>
+        <a href="{% url 'issue_tracker' %}">Issue Tracker</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+    <div class="container">
+        <div class="card">
+            <h2>Rate Vehicle</h2>
+            <div class="vehicle-name">{{ vehicle }}</div>
+            {% if existing_rating %}<span class="existing-badge">Updating your existing rating</span>{% endif %}
+            <div class="rating-hint">Rate each category from <strong>1 to 5</strong> — 1 is poor, 5 is excellent.</div>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="button-row">
+                    <button type="submit" class="btn-primary">{% if existing_rating %}Update Rating{% else %}Submit Rating{% endif %}</button>
+                    <a href="{% url 'home' %}" class="btn-secondary">Back to Home</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,94 +1,96 @@
 # CarHelper
+
 ## Project Description
 
-CarHelper is a Django-based web application designed to help vehicle owners understand mechanical issues, share troubleshooting advice, and view information about their vehicles.
+CarHelper is a Django-based web app built for people who drive cars but don't always know what's wrong with them.
 
-Many drivers experience problems with their vehicles but do not know whether the issue is common, serious, or easily repairable. Information is often scattered across forums, manufacturer documentation, and various automotive websites. CarHelper aims to centralize this knowledge by combining a community discussion platform with structured vehicle information and reliability ratings.
+The idea came from a pretty common problem that everyone gets once in a while. When something feels off with your car, you have no idea if it's serious, and every answer you find online is either buried in reddit or its in a hard to find website with little information. CarHelper aims to fix that by putting all this data into one platform that combines a community discussion forum with structured vehicle information and reliability ratings.
 
-The application will allow users to register vehicles, post questions about issues they are experiencing, and interact with other users who may have encountered similar problems. In addition to the discussion forum, the platform will include a vehicle lookup system that displays important specifications such as engine type, transmission, drivetrain, fuel type, oil capacity, and wheel size.
+Users can add their vehicles, post about issues they're having, and get input from other drivers who may have encountered the same problem. There's also a vehicle lookup tool that pulls real specs from the NHTSA database using a VIN, and a community-driven rating system that evaluates vehicles across multiple categories including reliability, repairability, fuel efficiency, and parts availability.
 
-CarHelper will also include a community-driven rating system that evaluates vehicles across multiple categories including reliability, repairability, fuel efficiency, parts availability, and overall ownership experience. These ratings will help users compare vehicles and identify common issues associated with specific makes and models.
 
-The goal of the project is to create a platform that makes vehicle knowledge more accessible while allowing users to learn from the experiences of other vehicle owners.
 ## Minimum Viable Product (MVP)
 
 The Minimum Viable Product (MVP) focuses on solving the core problem:
 
 > Helping vehicle owners understand vehicle issues and access basic vehicle information.
 
-The MVP version of the application will include the following core functionality:
+The MVP version of the application includes the following core functionality:
 
 - User authentication (account registration and login)
-- Ability for users to add and manage their vehicles (year, make, model)
-- A bulletin board where users can post vehicle-related issues
+- Ability for users to add, manage, and delete their vehicles (year, make, model, VIN, photo)
+- A bulletin board where users can post vehicle-related issues with category tags
 - Comment threads for community troubleshooting and discussion
-- A basic rating system that allows users to rate vehicles based on reliability and cost of ownership
+- A rating system that allows users to rate vehicles across multiple categories
+- A vehicle lookup tool powered by the NHTSA API
+- An issue frequency tracker showing the most commonly reported problems by vehicle and category
 
-The MVP will provide a functional prototype that allows users to share knowledge and seek advice from other vehicle owners.
-## Planned Features
+## Features
 
 ### 1. Bulletin Board (Vehicle Issues Forum)
 
-The platform will include a community bulletin board where users can post issues they are experiencing with their vehicles.
+The platform includes a community bulletin board where users can post issues they are experiencing with their vehicles.
 
 Features include:
 
-- Posts filtered by vehicle make and model
-- Display of the top 5 most discussed models with an additional "Other" category
-- Tagging system for issues such as:
+- All community posts visible on the home page
+- Tag filtering system for issues:
   - Engine
   - Transmission
   - Electrical
   - Suspension
-- Upvote and downvote system to highlight helpful answers
+  - Other
 - Comment threads for troubleshooting discussions
+- Post authors can delete their own posts
+
 ### 2. Vehicle Lookup Page
 
-Users will be able to search for their vehicle using either:
+Users can search for their vehicle using a VIN number.
 
-- VIN number  
-or  
-- Make / Model / Year
+The lookup page displays key vehicle specifications retrieved from the NHTSA public API including:
 
-The lookup page will display key vehicle specifications including:
-
-- Engine type
-- Horsepower
-- Transmission type
-- Drivetrain
+- Make, Model, and Year
+- Engine displacement (L) and cylinder count
 - Fuel type
-- Oil capacity
-- OEM wheel size
+- Transmission style
+- Drive type
+- Vehicle type
 
-Vehicle data will be retrieved using external automotive APIs.
 ### 3. Vehicle Rating System
 
-Users will be able to rate vehicles using a 1–5 star rating system across multiple categories.
+Users can rate vehicles using a 1–5 scale across multiple categories.
 
 Rating categories include:
 
-- Repairability
 - Mechanical reliability
+- Cost of ownership
+- Repairability
 - Fuel efficiency
 - Parts availability
 - DIY capability
 - Resale value
-- Interior quality
-- Rust resistance
 
-The system will calculate an overall reliability score based on these ratings.
+Each user can submit one rating per vehicle and update it at any time.
 
-Additional planned features include:
+### 4. Issue Frequency Tracker
 
-- Vehicle comparison tools for vehicles with similar value or ratings
-- Issue frequency tracking that highlights common problems for specific vehicles
+The issue tracker displays vehicles ranked by number of community reports, broken down by issue category. This helps users identify common problems associated with specific makes and models.
 
 Example:
 
-> "2011 Nissan Versa has a higher than average number of reports related to transmission failures."
+> "2011 Nissan Versa — Transmission — 4 reports"
+
+### 5. Garage Management
+
+Users can:
+
+- Add vehicles with make, model, year, VIN, and an optional photo
+- View all their registered vehicles on the home page
+- Delete vehicles they no longer own
+
 ## Development Methodology (Agile)
 
-This project will follow Agile development methodology with weekly sprints throughout the semester. Each sprint will focus on delivering a functional feature or improvement to the application.
+This project followed Agile development methodology with weekly sprints. Each sprint focused on delivering a functional feature or improvement to the application.
 
 ### Sprint Plan
 
@@ -114,7 +116,7 @@ This project will follow Agile development methodology with weekly sprints throu
 - Add basic vehicle rating system
 
 **Sprint 7**
-- Implement vehicle lookup functionality
+- Implement vehicle lookup functionality using the NHTSA API
 
 **Sprint 8**
 - Add filtering and tagging system for posts
@@ -126,19 +128,46 @@ This project will follow Agile development methodology with weekly sprints throu
 - Implement issue frequency tracking
 
 **Sprint 11**
-- Testing, debugging, and final improvements
+- Testing, debugging, UI cleanup, image upload support, delete functionality
+
 ## Environment Setup
 
 Clone the repository:
 
 ```bash
 git clone https://github.com/roen-lerma/carhelper.git
-cd carhelper
+cd CarHelper
+```
+
+Create and activate a virtual environment:
+
+```bash
 python -m venv venv
+
+# Windows
 venv\Scripts\activate
+
+# Mac/Linux
 source venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
+```
+
+Apply migrations and run the server:
+
+```bash
 python manage.py migrate
 python manage.py runserver
+```
 
+To access the admin panel, create a superuser:
 
+```bash
+python manage.py createsuperuser
+```
+
+Then go to `http://127.0.0.1:8000/admin/`
